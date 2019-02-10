@@ -47,3 +47,9 @@ required.  A filesystem directory containing the file specified when you invoke 
 
 ## `fileExtensions`
 optional; default value `[ ".js" ]`.  A list of extensions to search for when resolving a module if none is provided.  For instance, if the value for this option is `[ ".foo", ".bar", ".baz" ]` and your source file contains the line `import X from './data/x'`, the resolver will try `./data/x.foo`, `./data/x.bar`, and `./data/x.baz` before giving up.
+
+# Bugs
+probably a lot
+
+# License
+MIT
