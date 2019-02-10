@@ -1,7 +1,7 @@
 # eslint-import-resolver-parcel
 resolver for eslint-plugin-import using the Parcel module resolution algorithm.
 
-Supports:
+Supports the resolution of:
 
 - core imports and node_modules imports: `import fs from 'fs'; import { Foo, Bar } from 'foobar';`
 - relative imports: `import Baz from './foo/bar/baz';`
