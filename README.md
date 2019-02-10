@@ -7,6 +7,16 @@ Supports:
 - relative imports: `import Baz from './foo/bar/baz';`
 - absolute imports (scoped to the closest directory containing a package.json file): `import Baz from '/foo/bar/baz';`
 - tilde imports (scoped to the root directory specified in your .eslintrc.js): `import Baz from '~/foo/bar/baz';`
+- the `alias` field in your project's package.json:
+```JSON
+  // package.json
+  "alias": {
+    "naughty-package": "nice-package"
+  }
+
+  // source file
+  import Foo from 'naughty-package'; // <-- eslint resolves this to 'nice-package'
+```
 
 # Installation
 - install eslint-plugin-impotrt from npm:
