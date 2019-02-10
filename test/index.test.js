@@ -140,6 +140,13 @@ describe(`eslint-import-resolver-parcel`, function() {
                 .toBe(true);
         });
 
+        it(`resolves module aliases`, function() {
+            const result = resolver.resolve(`naughty-package`, mockSrc, mockConfig);
+
+            expect(result.found).toBe(true);
+            expect(result.path.includes(`nice-package`)).toBe(true);
+        });
+
         it(`resolves individual files inside third-party modules`, function() {
             const result = resolver.resolve(`jest/package.json`, mockSrc, mockConfig);
 

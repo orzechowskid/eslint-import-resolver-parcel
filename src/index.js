@@ -34,13 +34,55 @@ function pathToFile(basePath, extensions) {
     }
 }
 
-function resolve(modulePath, sourceFile, resolverConfig) {
+function resolveAbsolute(modulePath, packageRoot, extensionsList) {
+    return pathToFile(
+        path.resolve(packageRoot, modulePath.slice(1)),
+        extensionsList
+    );
+}
+
+function resolveTilde(modulePath, sourceFileDir, projectRoot, extensionsList) {
+    let basePath = path.dirname(sourceFileDir);
+
+    while (basePath !== projectRoot
+        && path.basename(path.dirname(basePath)) !== `node_modules`
+        && basePath !== `/`) {
+        basePath = path.dirname(basePath);
+    }
+
+    return pathToFile(
+        path.resolve(basePath, modulePath.replace(/^~\/?/, ``)),
+        extensionsList
+    );
+}
+
+function resolveRelative(modulePath, sourceFileDir, extensionsList) {
+    return pathToFile(
+        path.resolve(sourceFileDir, modulePath),
+        extensionsList
+    );
+}
+
+function resolveExternalModule(module, sourceFile) {
+    /* core module or node_module */
+    try {
+        return require.resolve(module, {
+            paths: [ path.dirname(sourceFile) ]
+        });
+    } catch (ex) {
+        return null;
+    }
+}
+
+function resolve(modPath, sourceFile, resolverConfig) {
     const {
         fileExtensions,
         rootDir
     } = resolverConfig || {};
     const sourceFileDir = path.dirname(sourceFile);
     const packageRoot = findRoot(sourceFile);
+    const packageJson = require(path.resolve(packageRoot, `package.json`));
+    const modulePath = packageJson.alias[modPath] || modPath;
     const projectRoot = rootDir
         ? path.resolve(packageRoot, rootDir)
         : sourceFileDir;
@@ -52,46 +94,23 @@ function resolve(modulePath, sourceFile, resolverConfig) {
     switch (modulePath[0]) {
         case `/`:
             /* absolute path.  resolve relative to project root */
-            fsPath = pathToFile(
-                path.resolve(packageRoot, modulePath.slice(1)),
-                extensionsList
-            );
+            fsPath = resolveAbsolute(modulePath, packageRoot, extensionsList);
 
             break;
         case `~`:
             /* tilde path.  resolve relative to nearest node_modules directory,
              * or the project root - whichever comes first */
-            fsPath = path.dirname(sourceFileDir);
-
-            while (fsPath !== projectRoot
-                && path.basename(path.dirname(fsPath)) !== `node_modules`
-                && fsPath !== `/`) {
-                fsPath = path.dirname(fsPath);
-            }
-
-            fsPath = pathToFile(
-                path.resolve(fsPath, modulePath.replace(/^~\/?/, ``)),
-                extensionsList
-            );
+            fsPath = resolveTilde(modulePath, sourceFileDir, projectRoot, extensionsList);
 
             break;
         case `.`:
             /* relative path */
-            fsPath = pathToFile(
-                path.resolve(sourceFileDir, modulePath),
-                extensionsList
-            );
+            fsPath = resolveRelative(modulePath, sourceFileDir, extensionsList);
 
             break;
         default:
-            /* core module or node_module */
-            try {
-                fsPath = require.resolve(modulePath, {
-                    paths: [ path.dirname(sourceFile) ]
-                });
-            } catch (ex) {
-                fsPath = null;
-            }
+            /* core module or node_modules module */
+            fsPath = resolveExternalModule(modulePath, sourceFile, packageJson);
 
             break;
     }
