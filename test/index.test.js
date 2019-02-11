@@ -63,6 +63,13 @@ describe(`eslint-import-resolver-parcel`, function() {
             expect(result.path).toEqual(path.resolve(mockPkgDir, `${mockImport}/index.js`));
         });
 
+        it(`resolves aliases`, function() {
+            const result = resolver.resolve(`/root/removed`, mockSrc, mockConfig);
+
+            expect(result.found).toBe(true);
+            expect(result.path.includes(`root_foo_baz_importMe`)).toBe(true);
+        });
+
         it(`resolves modules with extensions`, function() {
             const mockImport = `root/root_styles.scss`;
             const result = resolver.resolve(`/${mockImport}`, mockSrc, mockConfig);
@@ -103,6 +110,13 @@ describe(`eslint-import-resolver-parcel`, function() {
             expect(result.path).toEqual(path.resolve(mockRootDir, `${mockImport}.js`));
         });
 
+        it(`resolves aliases`, function() {
+            const result = resolver.resolve(`~/foo/baz/removed`, mockSrc, mockConfig);
+
+            expect(result.found).toBe(true);
+            expect(result.path.includes(`root_foo_baz_importMe`)).toBe(true);
+        });
+
         it(`resolves modules with extensions`, function() {
             const mockImport = `~/foo/root_foo_styles.scss`;
             const result = resolver.resolve(mockImport, mockSrc, mockConfig);
@@ -140,7 +154,7 @@ describe(`eslint-import-resolver-parcel`, function() {
                 .toBe(true);
         });
 
-        it(`resolves module aliases`, function() {
+        it(`resolves aliases`, function() {
             const result = resolver.resolve(`naughty-package`, mockSrc, mockConfig);
 
             expect(result.found).toBe(true);

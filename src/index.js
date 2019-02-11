@@ -82,7 +82,8 @@ function resolve(modPath, sourceFile, resolverConfig) {
     const sourceFileDir = path.dirname(sourceFile);
     const packageRoot = findRoot(sourceFile);
     const packageJson = require(path.resolve(packageRoot, `package.json`));
-    const modulePath = packageJson.alias[modPath] || modPath;
+    const moduleAliases = packageJson.alias || {};
+    const modulePath = moduleAliases[modPath] || modPath;
     const projectRoot = rootDir
         ? path.resolve(packageRoot, rootDir)
         : sourceFileDir;
