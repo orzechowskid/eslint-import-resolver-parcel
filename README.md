@@ -19,7 +19,7 @@ Supports the resolution of:
 ```
 
 # Installation
-- install eslint-plugin-impotrt from npm:
+- install eslint-plugin-import from npm:
 
 `npm install --save-dev eslint-plugin-import`
 
