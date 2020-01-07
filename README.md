@@ -25,7 +25,7 @@ Supports the resolution of:
 
 - install eslint-import-resolver-parcel:
 
-`npm install --save-dev https://github.com/orzechowskid/eslint-import-resolver-parcel`
+`npm install --save-dev @orzechowskid/eslint-import-resolver-parcel`
 
 - add the following to your .eslintrc.js (or equivalent):
 
