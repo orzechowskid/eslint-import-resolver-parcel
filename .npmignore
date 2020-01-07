@@ -1,0 +1,7 @@
+test
+.eslintrc.js
+coverage
+node_modules
+*~
+.#*
+README.md
