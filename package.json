@@ -1,6 +1,6 @@
 {
   "name": "@orzechowskid/eslint-import-resolver-parcel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "resolver for eslint-plugin-import using the Parcel module resolution algorithm",
   "main": "src/index.js",
   "scripts": {
