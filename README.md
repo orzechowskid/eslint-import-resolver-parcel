@@ -33,7 +33,7 @@ Supports the resolution of:
   "plugins": [ "import" ],
   "settings": {
     "import/resolver": {
-      "parcel": {
+      "@orzechowskid/eslint-import-resolver-parcel": {
         "rootDir": "src",
         "fileExtensions": [ ".js", ".jsx" ]
       }
