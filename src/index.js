@@ -5,9 +5,9 @@ const findRoot = require('find-root');
 
 /**
  * given a string which looks like a filesystem path, resolve it to something useful
- * @param {String} path
- * @param {Array<String>} extensions - a list of file extensions to append if needed
- * @return {String|undefined} a path to a real file, or undefined
+ * @param {string} basePath
+ * @param {string[]} extensions - a list of file extensions to append if needed
+ * @return {string|undefined} a path to a real file, or undefined
  */
 function pathToFile(basePath, extensions) {
     try {
@@ -34,6 +34,12 @@ function pathToFile(basePath, extensions) {
     }
 }
 
+/**
+ * @param {string} modulePath
+ * @param {string} packageRoot
+ * @param {string[]} extensionsList
+ * @return {string}
+ */
 function resolveAbsolute(modulePath, packageRoot, extensionsList) {
     return pathToFile(
         path.resolve(packageRoot, modulePath.slice(1)),
@@ -41,6 +47,13 @@ function resolveAbsolute(modulePath, packageRoot, extensionsList) {
     );
 }
 
+/**
+ * @param {string} modulePath
+ * @param {string} sourceFileDir
+ * @param {string} projectRoot
+ * @param {string[]} extensionsList
+ * @return {string}
+ */
 function resolveTilde(modulePath, sourceFileDir, projectRoot, extensionsList) {
     let basePath = path.dirname(sourceFileDir);
 
@@ -56,6 +69,12 @@ function resolveTilde(modulePath, sourceFileDir, projectRoot, extensionsList) {
     );
 }
 
+/**
+ * @param {string} modulePath
+ * @param {string} sourceFileDir
+ * @param {string[]} extensionsList
+ * @return {string}
+ */
 function resolveRelative(modulePath, sourceFileDir, extensionsList) {
     return pathToFile(
         path.resolve(sourceFileDir, modulePath),
@@ -63,6 +82,11 @@ function resolveRelative(modulePath, sourceFileDir, extensionsList) {
     );
 }
 
+/**
+ * @param {string} module
+ * @param {string} sourceFile
+ * @return {string|null}
+ */
 function resolveExternalModule(module, sourceFile) {
     /* core module or node_module */
     try {
